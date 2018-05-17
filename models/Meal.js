@@ -1,8 +1,7 @@
 var mongoose = require('mongoose');
 
 var MealSchema = new mongoose.Schema({
-  foods: [mongoose.SchemaTypes.ObjectId],
-  command: mongoose.SchemaTypes.ObjectId,
+  foods: [{ foodId: mongoose.SchemaTypes.ObjectId, cooking: { type: String }, options: [String] }],
   price: Number,
   created: { type: Date, default: Date.now, required: true },
   updated: { type: Date }
