@@ -1,4 +1,5 @@
 var express = require('express');
+var csv = require('fast-csv');
 var router = express.Router();
 var mongoose = require('mongoose');
 var Drink = require('../models/Drink.js');
@@ -40,6 +41,33 @@ router.delete('/:id', function (req, res, next) {
     Drink.findByIdAndRemove(req.params.id, req.body, function (err, post) {
         if (err) return next(err);
         res.json(post);
+    });
+});
+
+/* Import CSV file */
+router.post('/import', function(req, res, next) {
+    if (!req.files)
+		return res.status(400).send('No files were uploaded.');
+	
+	var drinkFile = req.files.file;
+	var drinks = [];
+		
+	csv
+	 .fromString(drinkFile.data.toString(), {
+		 headers: true,
+		 ignoreEmpty: true
+	 })
+	 .on("data", function(data){
+		 data['_id'] = new mongoose.Types.ObjectId();
+		 
+		 drinks.push(data);
+	 })
+	 .on("end", function(){
+		 Drink.create(drinks, function(err, documents) {
+			if (err) throw err;
+			
+			res.send(drinks.length + ' drinks have been successfully uploaded.');
+		 });
     });
 });
 

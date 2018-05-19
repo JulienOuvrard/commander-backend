@@ -1,5 +1,6 @@
 var express = require('express');
 var cors = require('cors');
+var fileUpload = require('express-fileupload');
 var path = require('path');
 var favicon = require('serve-favicon');
 var logger = require('morgan');
@@ -19,9 +20,10 @@ var app = express();
 
 app.use(logger('dev'));
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({'extended':'false'}));
+app.use(bodyParser.urlencoded({'extended':false}));
+app.use(fileUpload());
 app.use(cors());
-app.use(express.static(path.join(__dirname, 'dist')));
+//app.use(express.static(path.join(__dirname, 'dist')));
 //app.use('/api/commands', express.static(path.join(__dirname, 'dist')));
 app.use('/api/commands', commands);
 app.use('/api/foods', foods);
