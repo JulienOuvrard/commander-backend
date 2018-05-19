@@ -63,7 +63,7 @@ router.post('/import', function (req, res, next) {
             foods.push(data);
         })
         .on("end", function () {
-            Food.create(foods, function (err, documents) {
+            Food.create(foods, function (err, post) {
                 if (err) return next(err);
                 res.json(post);
                 //res.send(foods.length + ' foods have been successfully uploaded.');
