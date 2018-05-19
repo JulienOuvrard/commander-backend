@@ -45,30 +45,30 @@ router.delete('/:id', function (req, res, next) {
 });
 
 /* Import CSV file */
-router.post('/import', function(req, res, next) {
+router.post('/import', function (req, res, next) {
     if (!req.files)
-		return res.status(400).send('No files were uploaded.');
-	
-	var drinkFile = req.files.file;
-	var drinks = [];
-		
-	csv
-	 .fromString(drinkFile.data.toString(), {
-		 headers: true,
-		 ignoreEmpty: true
-	 })
-	 .on("data", function(data){
-		 data['_id'] = new mongoose.Types.ObjectId();
-		 
-		 drinks.push(data);
-	 })
-	 .on("end", function(){
-		 Drink.create(drinks, function(err, documents) {
-			if (err) throw err;
-			
-			res.send(drinks.length + ' drinks have been successfully uploaded.');
-		 });
-    });
+        return res.status(400).send('No files were uploaded.');
+
+    var drinkFile = req.files.file;
+    var drinks = [];
+
+    csv
+        .fromString(drinkFile.data.toString(), {
+            headers: true,
+            ignoreEmpty: true
+        })
+        .on("data", function (data) {
+            data['_id'] = new mongoose.Types.ObjectId();
+
+            drinks.push(data);
+        })
+        .on("end", function () {
+            Drink.create(drinks, function (err, post) {
+                if (err) return next(err);
+                res.json(post);
+                //res.send(drinks.length + ' drinks have been successfully uploaded.');
+            });
+        });
 });
 
 module.exports = router;
