@@ -1,7 +1,6 @@
 var mongoose = require('mongoose');
 
 var CommandSchema = new mongoose.Schema({
-  drinks: [mongoose.SchemaTypes.ObjectId],
   round: [mongoose.SchemaTypes.ObjectId],
   meals: [mongoose.SchemaTypes.ObjectId],
   name: { type: String },
