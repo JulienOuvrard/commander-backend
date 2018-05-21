@@ -7,7 +7,7 @@ var logger = require('morgan');
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
 mongoose.Promise = require('bluebird');
-mongoose.connect('mongodb://localhost/commander-backend', { promiseLibrary: require('bluebird') })
+mongoose.connect('mongodb://localhost:27017/commander-db', { promiseLibrary: require('bluebird') })
   .then(() =>  console.log('connection successful'))
   .catch((err) => console.error(err));
 
