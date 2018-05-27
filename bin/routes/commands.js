@@ -22,6 +22,14 @@ class Commands {
                 res.json(post);
             });
         });
+        this.router.get('/:id/desciption', function (req, res, next) {
+            command_1.Command.findById(req.params.id, function (err, post) {
+                if (err)
+                    return next(err);
+                const desc = post ? post.description() : '';
+                res.json(desc);
+            });
+        });
         this.router.post('/', function (req, res, next) {
             command_1.Command.create(req.body, function (err, post) {
                 if (err)

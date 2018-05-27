@@ -32,6 +32,7 @@ export var CommandSchema: Schema = new Schema({
       document.created = now;
     }
     document.updated = now;
+    next();
   }).pre('update', function (next) {
     next();
   });

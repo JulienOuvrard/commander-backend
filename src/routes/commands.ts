@@ -27,6 +27,16 @@ class Commands {
             });
         });
 
+        /* GET SINGLE Command description*/
+        this.router.get('/:id/desciption', function(req, res, next) {
+            Command.findById(req.params.id, function (err, post) {
+                if (err) return next(err);
+                
+                const desc: string = post ? post.description() : '';
+                res.json(desc);
+            })
+        });
+
         /* SAVE Command */
         this.router.post('/', function (req, res, next) {
             Command.create(req.body, function (err, post) {

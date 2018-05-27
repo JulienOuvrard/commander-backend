@@ -19,6 +19,7 @@ exports.CommandSchema = new mongoose_1.Schema({
         document.created = now;
     }
     document.updated = now;
+    next();
 }).pre('update', function (next) {
     next();
 });
