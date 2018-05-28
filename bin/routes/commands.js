@@ -63,7 +63,6 @@ class Commands {
                     const html = fs.readFileSync(path.join(__dirname, '..', 'template/print.template.html'), 'utf8')
                         .replace('{{title}}', 'Command')
                         .replace('{{content}}', this.commandDescHtml(req.body));
-                    console.log(html);
                     const options = {
                         "width": '80mm',
                         "height": '200mm',
@@ -86,7 +85,6 @@ class Commands {
         }.bind(this));
     }
     commandDescHtml(commandDesc) {
-        console.log(commandDesc);
         let totalPrice = 0;
         const indentDesc = commandDesc.map(elt => {
             totalPrice += elt.price;
