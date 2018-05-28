@@ -86,6 +86,7 @@ class Commands {
         }.bind(this));
     }
     commandDescHtml(commandDesc) {
+        console.log(commandDesc);
         let totalPrice = 0;
         const indentDesc = commandDesc.map(elt => {
             totalPrice += elt.price;
