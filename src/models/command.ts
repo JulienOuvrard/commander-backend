@@ -1,4 +1,6 @@
 import { Schema, Document, SchemaTypes, Model, model } from 'mongoose';
+import { Meal } from './meal';
+import { Round } from './round';
 
 export interface CommandInterface {
   rounds: string[];
@@ -11,7 +13,7 @@ export interface CommandInterface {
 }
 
 export interface CommandModelInterface extends CommandInterface, Document {
-  description(): string;
+  description(cb: Function): void;
 }
 
 export var CommandSchema: Schema = new Schema({
@@ -37,9 +39,9 @@ export var CommandSchema: Schema = new Schema({
     next();
   });
 
-CommandSchema.methods.description = function (): string {
+CommandSchema.methods.description = function (cb: Function) {
   // TODO Add description
-  return '';
+  
 }
 
 export const Command: Model<CommandModelInterface> = model<CommandModelInterface>('Command', CommandSchema);

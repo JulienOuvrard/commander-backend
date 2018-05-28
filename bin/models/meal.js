@@ -27,5 +27,10 @@ exports.MealSchema = new mongoose_1.Schema({
 }).pre('update', function (next) {
     next();
 });
+exports.MealSchema.methods.description = function () {
+    return this.foods.map(curr => {
+        return `(${curr.quantity}) ${curr.name} ${curr.cooking ? `[${curr.cooking}]` : ``}`;
+    }).join(', ');
+};
 exports.Meal = mongoose_1.model('Meal', exports.MealSchema);
 //# sourceMappingURL=meal.js.map

@@ -1,6 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const express = require("express");
+const pdf = require("html-pdf");
+const path = require("path");
+const fs = require("fs");
 const command_1 = require("../models/command");
 class Commands {
     constructor() {
@@ -26,8 +29,14 @@ class Commands {
             command_1.Command.findById(req.params.id, function (err, post) {
                 if (err)
                     return next(err);
-                const desc = post ? post.description() : '';
-                res.json(desc);
+                if (post) {
+                    post.description(desc => {
+                        res.json(desc);
+                    });
+                }
+                else {
+                    res.json('');
+                }
             });
         });
         this.router.post('/', function (req, res, next) {
@@ -51,6 +60,81 @@ class Commands {
                 res.json(post);
             });
         });
+        this.router.post('/:id/print', function (req, res, next) {
+            command_1.Command.findById(req.params.id, function (err, post) {
+                if (err)
+                    return next(err);
+                if (post) {
+                    const html = fs.readFileSync(path.join(__dirname, '..', 'template/print.template.html'), 'utf8')
+                        .replace('{{title}}', 'Command')
+                        .replace('{{content}}', this.commandDescHtml(req.body));
+                    console.log(html);
+                    const options = {
+                        "width": '80mm',
+                        "height": '200mm',
+                        "header": {
+                            "height": '20mm',
+                            "contents": '<div style="text-align: center;">Café de la Gare</div>'
+                        },
+                    };
+                    const filename = path.join(__dirname, '..', 'receipt', `${post.id}.pdf`);
+                    pdf
+                        .create(html, options)
+                        .toFile(filename, (err, file) => {
+                        if (err) {
+                            return next(err.stack);
+                        }
+                        res.json(file);
+                    });
+                }
+            }.bind(this));
+        }.bind(this));
+    }
+    commandDescHtml(commandDesc) {
+        let totalPrice = 0;
+        const indentDesc = commandDesc.map(elt => {
+            totalPrice += elt.price;
+            const price = this.formatPrice(elt.price.toString());
+            return `<tr>
+            <td>${elt.detail}</td>
+            <td>${price}€</td>
+            </tr>`;
+        }).join('');
+        const total = `<tr><td>Total</td><td>${this.formatPrice(totalPrice.toString())}€</td></tr>`;
+        return `<table>${indentDesc}${total}</table>`;
+    }
+    formatPrice(price) {
+        const tok = price.split('.');
+        const resTok = [];
+        if (tok[0]) {
+            if (tok[0].length === 1) {
+                resTok.push(' ' + tok[0]);
+            }
+            else if (tok[0].length === 0) {
+                resTok.push(' 0');
+            }
+            else {
+                resTok.push(tok[0]);
+            }
+        }
+        else {
+            resTok.push(' 0');
+        }
+        if (tok[1]) {
+            if (tok[1].length === 1) {
+                resTok.push(tok[1] + '0');
+            }
+            else if (tok[1].length === 0) {
+                resTok.push('00');
+            }
+            else {
+                resTok.push(tok[1]);
+            }
+        }
+        else {
+            resTok.push('00');
+        }
+        return resTok.join('.');
     }
 }
 exports.default = new Commands().router;

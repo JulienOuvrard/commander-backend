@@ -1,0 +1,98 @@
+<html>
+
+<head>
+    <meta charset="utf8">
+    <title>{{title}}</title>
+    <style>
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Sackers Gothic Std';
+            font-weight: 500;
+            font-size: 7px;
+            background: rgb(241, 241, 241);
+            -webkit-print-color-adjust: exact;
+            box-sizing: border-box;
+        }
+
+        .page {
+            position: relative;
+            height: 200mm;
+            width: 80mm;
+            display: block;
+            background: rgb(241, 241, 241);
+            page-break-after: auto;
+            margin: 50px;
+            overflow: hidden;
+        }
+
+        @media print {
+            body {
+                background: rgb(241, 241, 241);
+                font-size: 7pt;
+            }
+
+            .page {
+                margin: 0;
+                height: 100%;
+                width: 100%;
+            }
+        }
+
+        .page.first {
+            border-left: 5px solid green;
+        }
+
+        .bottom {
+            position: absolute;
+            left: 5mm;
+            right: 5mm;
+            bottom: 5mm;
+        }
+
+        .group {
+            margin-top: 3mm;
+        }
+
+        .line {
+            color: white;
+            position: relative;
+        }
+
+        .center {
+            text-align: center;
+        }
+
+        .logo {
+            position: relative;
+            width: 80%;
+            left: 10%;
+            top: 15%;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        tr:last-child {
+            border-top: 2px solid black;
+            margin-top: 6px;
+            padding: 8px;
+        }
+
+        td:last-child {
+            text-align: right;
+            padding: 8px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="page">
+        {{content}}
+    </div>
+</body>
+
+</html>

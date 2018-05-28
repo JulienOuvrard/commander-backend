@@ -13,7 +13,7 @@ export interface RoundInterface {
 }
 
 export interface RoundModelInterface extends RoundInterface, Document {
-
+  description(): string;
 }
 
 export var RoundSchema = new Schema({
@@ -40,5 +40,11 @@ export var RoundSchema = new Schema({
   }).pre('update', function (next) {
     next();
   });
+
+  RoundSchema.methods.description = function (): string {
+    return this.drinks.map(element => {
+      return `(${element.quantity}) ${element.name}`;
+    }).join(', ');
+  }
 
   export const Round: Model<RoundModelInterface> = model<RoundModelInterface>('Round', RoundSchema);

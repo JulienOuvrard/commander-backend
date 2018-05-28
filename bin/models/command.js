@@ -23,8 +23,7 @@ exports.CommandSchema = new mongoose_1.Schema({
 }).pre('update', function (next) {
     next();
 });
-exports.CommandSchema.methods.description = function () {
-    return '';
+exports.CommandSchema.methods.description = function (cb) {
 };
 exports.Command = mongoose_1.model('Command', exports.CommandSchema);
 //# sourceMappingURL=command.js.map

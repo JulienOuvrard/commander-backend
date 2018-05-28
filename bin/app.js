@@ -19,6 +19,7 @@ class App {
             .catch((err) => console.error(err));
         this.express = express();
         this.middleware();
+        this.statics();
         this.routes();
     }
     middleware() {
@@ -27,6 +28,9 @@ class App {
         this.express.use(bodyParser.urlencoded({ extended: false }));
         this.express.use(fileupload());
         this.express.use(cors());
+    }
+    statics() {
+        this.express.use('/receipt', express.static(__dirname + '/receipt'));
     }
     routes() {
         this.express.use('/api/commands', commands_1.default);

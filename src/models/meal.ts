@@ -15,7 +15,7 @@ export interface MealInterface {
 }
 
 export interface MealModelInterface extends MealInterface, Document {
-
+  description(): string;
 }
 
 export var MealSchema = new Schema({
@@ -44,5 +44,10 @@ export var MealSchema = new Schema({
   }).pre('update', function (next) {
     next();
   });
+MealSchema.methods.description = function (): string {
+  return this.foods.map(curr => {
+    return `(${curr.quantity}) ${curr.name} ${curr.cooking ? `[${curr.cooking}]` : ``}`;
+  }).join(', ');
+}
 
 export const Meal: Model<MealModelInterface> = model<MealModelInterface>('Meal', MealSchema);

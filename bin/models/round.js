@@ -25,5 +25,10 @@ exports.RoundSchema = new mongoose_1.Schema({
 }).pre('update', function (next) {
     next();
 });
+exports.RoundSchema.methods.description = function () {
+    return this.drinks.map(element => {
+        return `(${element.quantity}) ${element.name}`;
+    }).join(', ');
+};
 exports.Round = mongoose_1.model('Round', exports.RoundSchema);
 //# sourceMappingURL=round.js.map

@@ -26,6 +26,7 @@ class App {
       .catch((err) => console.error(err))
     this.express = express();
     this.middleware();
+    this.statics();
     this.routes();
   }
 
@@ -36,6 +37,11 @@ class App {
     this.express.use(bodyParser.urlencoded({ extended: false }));
     this.express.use(fileupload());
     this.express.use(cors());
+  }
+
+  // Configure statics routes.
+  private statics(): void {
+    this.express.use('/receipt', express.static(__dirname + '/receipt'));
   }
 
   // Configure API endpoints.
