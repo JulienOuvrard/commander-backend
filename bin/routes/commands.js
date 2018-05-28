@@ -25,17 +25,12 @@ class Commands {
                 res.json(post);
             });
         });
-        this.router.get('/:id/desciption', function (req, res, next) {
-            command_1.Command.findById(req.params.id, function (err, post) {
+        this.router.get('/:id/description', function (req, res, next) {
+            command_1.Command.findById(req.params.id).populate('rounds').populate('meals').exec(function (err, post) {
                 if (err)
                     return next(err);
                 if (post) {
-                    post.description(desc => {
-                        res.json(desc);
-                    });
-                }
-                else {
-                    res.json('');
+                    res.json(post.description());
                 }
             });
         });

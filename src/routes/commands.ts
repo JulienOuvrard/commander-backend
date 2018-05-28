@@ -31,18 +31,13 @@ class Commands {
         });
 
         /* GET SINGLE Command description*/
-        this.router.get('/:id/desciption', function (req, res, next) {
-            Command.findById(req.params.id, function (err, post) {
+        this.router.get('/:id/description', function (req, res, next) {
+            Command.findById(req.params.id).populate('rounds').populate('meals').exec(function (err, post) {
                 if (err) return next(err);
 
-                if (post) {
-                    post.description(desc => {
-                        res.json(desc);
-                    });
-                } else {
-                    res.json('');
+                if(post) {
+                    res.json(post.description());
                 }
-
             })
         });
 

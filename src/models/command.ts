@@ -13,12 +13,12 @@ export interface CommandInterface {
 }
 
 export interface CommandModelInterface extends CommandInterface, Document {
-  description(cb: Function): void;
+  description(): any;
 }
 
 export var CommandSchema: Schema = new Schema({
-  rounds: [SchemaTypes.ObjectId],
-  meals: [SchemaTypes.ObjectId],
+  rounds: [{type: SchemaTypes.ObjectId, ref: 'Round'}],
+  meals: [{type:SchemaTypes.ObjectId, ref: 'Meal'}],
   name: { type: String },
   price: { type: Number, required: true, default: 0 },
   isPaid: { type: Boolean, required: true, default: false },
@@ -39,9 +39,26 @@ export var CommandSchema: Schema = new Schema({
     next();
   });
 
-CommandSchema.methods.description = function (cb: Function) {
+CommandSchema.methods.description = function () {
   // TODO Add description
-  
+  const desc: any[] = []
+  desc.push(this.rounds.map(round => {
+    return {
+      desc: round.drinks.map(drink=>{
+              return `(${drink.quantity}) ${drink.name}`
+            }).join(' '), 
+      price: round.price
+    };
+  }))
+  desc.push(this.meals.map(meal => {
+    return {
+      desc: meal.foods.map(food=>{
+              return `(${food.quantity}) ${food.name}`
+            }).join(' '), 
+      price: meal.price
+    };
+  }))
+  return desc;
 }
 
 export const Command: Model<CommandModelInterface> = model<CommandModelInterface>('Command', CommandSchema);
