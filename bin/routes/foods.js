@@ -58,6 +58,9 @@ class Foods {
             })
                 .on("data", function (data) {
                 data['_id'] = new mongoose.Types.ObjectId();
+                if (data['ingredients']) {
+                    data['ingredients'] = data['ingredients'].split('|');
+                }
                 foods.push(data);
             })
                 .on("end", function () {
