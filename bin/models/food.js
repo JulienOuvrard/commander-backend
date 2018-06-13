@@ -7,6 +7,7 @@ exports.FoodSchema = new mongoose_1.Schema({
     price: { type: Number, default: 0, required: true },
     needCooking: { type: Boolean, default: false, required: true },
     hasIngredients: { type: Boolean, default: false, required: true },
+    ingredients: { type: [String] },
     currency: { type: String, default: "EUR", required: true },
     created: { type: Date },
     updated: { type: Date }
