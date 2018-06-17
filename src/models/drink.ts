@@ -2,6 +2,7 @@ import { Schema, Document, SchemaTypes, Model, model } from 'mongoose';
 
 export interface DrinkInterface {
   name: string;
+  category: string;
   quantity: number;
   price: number;
   currency: string;
@@ -15,6 +16,7 @@ export interface DrinkModelInterface extends DrinkInterface, Document {
 
 export var DrinkSchema: Schema = new Schema({
   name: { type: String, required: true },
+  category: { type: String, required: true },
   quantity: { type: Number, default: 1 },
   price: { type: Number, default: 0, required: true },
   currency: { type: String, default: "EUR", required: true },

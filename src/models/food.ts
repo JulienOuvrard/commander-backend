@@ -2,11 +2,13 @@ import { Schema, Document, SchemaTypes, Model, model } from 'mongoose';
 
 export interface FoodInterface {
   name: string;
+  category: string;
   quantity: number;
   price: number;
   currency: string;
   needCooking: boolean;
   hasIngredients: boolean;
+  ingredients: string[];
   created: Date;
   updated: Date;
 }
@@ -17,6 +19,7 @@ export interface FoodModelInterface extends FoodInterface, Document {
 
 export var FoodSchema: Schema = new Schema({
   name: { type: String, required: true },
+  category: { type: String, required: true },
   quantity: { type: Number, default: 1 },
   price: { type: Number, default: 0, required: true },
   needCooking: { type: Boolean, default: false, required: true },

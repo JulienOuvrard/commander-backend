@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = require("mongoose");
 exports.FoodSchema = new mongoose_1.Schema({
     name: { type: String, required: true },
+    category: { type: String, required: true },
     quantity: { type: Number, default: 1 },
     price: { type: Number, default: 0, required: true },
     needCooking: { type: Boolean, default: false, required: true },
