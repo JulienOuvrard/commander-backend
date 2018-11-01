@@ -19,9 +19,11 @@ class App {
   // ref to Express instance
   public express: express.Application;
 
+  private dbHostDev = 'mongodb://localhost:27017/commander-db';
+  private dbHost = 'mongodb://database/commander-db';
   //Run configuration methods on the Express instance.
   constructor() {
-    mongoose.connect('mongodb://localhost:27017/commander-db', { promiseLibrary: bluebird })
+    mongoose.connect(this.dbHost, { promiseLibrary: bluebird })
       .then(() => console.log('connection successful'))
       .catch((err) => console.error(err))
     this.express = express();
