@@ -20,7 +20,8 @@ class App {
   public express: express.Application;
 
   private dbHostDev = 'mongodb://localhost:27017/commander-db';
-  private dbHost = 'mongodb://database/commander-db';
+  private dbHostProd = 'mongodb://database/commander-db';
+  private dbHost = process.env.PROD ? this.dbHostProd : this.dbHostDev;
   //Run configuration methods on the Express instance.
   constructor() {
     mongoose.connect(this.dbHost, { promiseLibrary: bluebird })

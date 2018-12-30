@@ -14,7 +14,10 @@ const meals_1 = require("./routes/meals");
 const rounds_1 = require("./routes/rounds");
 class App {
     constructor() {
-        mongoose.connect('mongodb://localhost:27017/commander-db', { promiseLibrary: bluebird })
+        this.dbHostDev = 'mongodb://localhost:27017/commander-db';
+        this.dbHostProd = 'mongodb://database/commander-db';
+        this.dbHost = process.env.PROD ? this.dbHostProd : this.dbHostDev;
+        mongoose.connect(this.dbHost, { promiseLibrary: bluebird })
             .then(() => console.log('connection successful'))
             .catch((err) => console.error(err));
         this.express = express();
