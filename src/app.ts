@@ -20,13 +20,42 @@ class App {
   public express: express.Application;
 
   private dbHostDev = 'mongodb://localhost:27017/commander-db';
-  private dbHostProd = 'mongodb://database/commander-db';
+  private dbHostProd = 'mongodb://database:27017/commander-db';
   private dbHost = process.env.PROD ? this.dbHostProd : this.dbHostDev;
+
+  private options = {
+    promiseLibrary: bluebird,
+    useNewUrlParser: true,
+    autoIndex: false, // Don't build indexes
+    connectTimeoutMS: 3000,
+    reconnectTries: 30, // Retry up to 30 times
+    reconnectInterval: 500, // Reconnect every 500ms
+    poolSize: 10, // Maintain up to 10 socket connections
+    // If not connected, return errors immediately rather than waiting for reconnect
+    bufferMaxEntries: 0
+  }
+
+  private connectWithRetry = () => {
+    console.log('MongoDB connection with retry', this.dbHost)
+    mongoose.connect(this.dbHost, this.options).then(() => {
+      console.log('MongoDB is connected');
+    }).catch(err => {
+      console.error(err)
+      console.log('MongoDB connection unsuccessful, retry after 5 seconds.')
+      setTimeout(this.connectWithRetry, 5000)
+    })
+  }
+
   //Run configuration methods on the Express instance.
   constructor() {
-    mongoose.connect(this.dbHost, { promiseLibrary: bluebird })
+    /*mongoose.connect(this.dbHost, { promiseLibrary: bluebird })
       .then(() => console.log('connection successful'))
-      .catch((err) => console.error(err))
+      .catch((err) => console.error(err))*/
+    this.connectWithRetry();
+    this.initBackend();
+  }
+
+  private initBackend() {
     this.express = express();
     this.middleware();
     this.statics();
