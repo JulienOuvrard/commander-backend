@@ -15,11 +15,32 @@ const rounds_1 = require("./routes/rounds");
 class App {
     constructor() {
         this.dbHostDev = 'mongodb://localhost:27017/commander-db';
-        this.dbHostProd = 'mongodb://database/commander-db';
+        this.dbHostProd = 'mongodb://database:27017/commander-db';
         this.dbHost = process.env.PROD ? this.dbHostProd : this.dbHostDev;
-        mongoose.connect(this.dbHost, { promiseLibrary: bluebird })
-            .then(() => console.log('connection successful'))
-            .catch((err) => console.error(err));
+        this.options = {
+            promiseLibrary: bluebird,
+            useNewUrlParser: true,
+            autoIndex: false,
+            connectTimeoutMS: 3000,
+            reconnectTries: 30,
+            reconnectInterval: 500,
+            poolSize: 10,
+            bufferMaxEntries: 0
+        };
+        this.connectWithRetry = () => {
+            console.log('MongoDB connection with retry', this.dbHost);
+            mongoose.connect(this.dbHost, this.options).then(() => {
+                console.log('MongoDB is connected');
+            }).catch(err => {
+                console.error(err);
+                console.log('MongoDB connection unsuccessful, retry after 5 seconds.');
+                setTimeout(this.connectWithRetry, 5000);
+            });
+        };
+        this.connectWithRetry();
+        this.initBackend();
+    }
+    initBackend() {
         this.express = express();
         this.middleware();
         this.statics();
