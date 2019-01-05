@@ -12,6 +12,7 @@ const foods_1 = require("./routes/foods");
 const drinks_1 = require("./routes/drinks");
 const meals_1 = require("./routes/meals");
 const rounds_1 = require("./routes/rounds");
+const dashboard_1 = require("./routes/dashboard");
 class App {
     constructor() {
         this.dbHostDev = 'mongodb://localhost:27017/commander-db';
@@ -57,21 +58,26 @@ class App {
         this.express.use('/receipt', express.static(__dirname + '/receipt'));
     }
     routes() {
+        const isDev = this.express.get('env') === 'development';
+        this.express.use('/api/dashboard', dashboard_1.default);
         this.express.use('/api/commands', commands_1.default);
         this.express.use('/api/foods', foods_1.default);
         this.express.use('/api/drinks', drinks_1.default);
         this.express.use('/api/meals', meals_1.default);
         this.express.use('/api/rounds', rounds_1.default);
         this.express.use(function (err, req, res, next) {
-            err = new Error('Not Found');
-            err.status = 404;
-            next(err);
+            let error = { message: new Error('Not Found'), status: 404 };
+            if (err) {
+                error.message = new Error(`Internal Server error: ${err}`);
+                error.status = 500;
+            }
+            next(error);
         });
         this.express.use(function (err, req, res, next) {
             res.locals.message = err.message;
-            res.locals.error = req.this.express.get('env') === 'development' ? err : {};
+            res.locals.error = isDev ? err : {};
             res.status(err.status || 500);
-            res.json('error');
+            res.json(err.message.message);
         });
     }
 }
