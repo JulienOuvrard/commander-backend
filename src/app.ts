@@ -7,6 +7,7 @@ import * as cors from 'cors';
 import * as mongoose from 'mongoose';
 import * as fileupload from 'express-fileupload';
 import * as bluebird from 'bluebird';
+import * as socketIo from 'socket.io';
 
 import Commands from './routes/commands';
 import Foods from './routes/foods';
