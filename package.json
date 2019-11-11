@@ -49,6 +49,6 @@
     "eslint": "^4.19.1",
     "ts-node": "^6.2.0",
     "tslint": "^5.20.1",
-    "typescript": "^2.9.2"
+    "typescript": "^3.6.4"
   }
 }

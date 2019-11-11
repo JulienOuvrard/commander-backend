@@ -6,7 +6,6 @@ const bodyParser = require("body-parser");
 const cors = require("cors");
 const mongoose = require("mongoose");
 const fileupload = require("express-fileupload");
-const bluebird = require("bluebird");
 const commands_1 = require("./routes/commands");
 const foods_1 = require("./routes/foods");
 const drinks_1 = require("./routes/drinks");
@@ -19,8 +18,8 @@ class App {
         this.dbHostProd = 'mongodb://database:27017/commander-db';
         this.dbHost = process.env.PROD ? this.dbHostProd : this.dbHostDev;
         this.options = {
-            promiseLibrary: bluebird,
             useNewUrlParser: true,
+            useUnifiedTopology: true,
             autoIndex: false,
             connectTimeoutMS: 3000,
             reconnectTries: 30,
