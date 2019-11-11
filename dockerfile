@@ -1,5 +1,5 @@
  # Create image based on the official Node 6 image from the dockerhub
-FROM node:8
+FROM node:10
 
 # Set environment to production
 ENV PROD=true
