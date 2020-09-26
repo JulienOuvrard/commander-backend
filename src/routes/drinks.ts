@@ -21,6 +21,39 @@ class Drinks {
             });
         });
 
+        /* GET Export file to csv */
+        this.router.get('/export', function (req, res, next) {
+            Drink.find(function (err, products) {
+                if (err) return next(err);
+                res.writeHead(200, {
+                    'Content-Type': 'text/csv',
+                    'Content-Disposition': 'attachement; filename=drinks_export.csv'
+                });
+                res.end(this.dataToCSV(products, [{key: 'name' , label: 'name'}, {key: 'category' , label: 'category'}, {key: 'price' , label: 'price'}]))
+            }.bind(this));
+        }.bind(this));
+
+        /* GET Categories of Drinks */
+        this.router.get('/categories', function (req, res, next) {
+            Drink.distinct('category', function (err, post) {
+                if (err) return next(err);
+                res.json(post);
+            });
+        });
+
+        /* GET drinks grouped by key */
+        this.router.get('/groupBy/:key', function (req, res, next) {
+            Drink.aggregate()
+            .group({
+                _id: `$${req.params.key}`,
+                drinks: { $push: '$$ROOT'}
+            })
+            .exec(function (err, post) {
+                if (err) return next(err);
+                res.json(post);
+            });
+        });
+
         /* GET SINGLE Drink BY ID */
         this.router.get('/:id', function (req, res, next) {
             Drink.findById(req.params.id, function (err, post) {
@@ -79,6 +112,26 @@ class Drinks {
                     });
                 });
         });
+    }
+
+    private dataToCSV(dataList: any[], headers: any[]) {
+        const allObj: any[][] = [];
+
+        const headerLabels: string[] = headers.map(header => header.label);
+        const headerKeys: any[] = headers.map(header => header.key);
+        allObj.push(headerLabels);
+
+        dataList.forEach(obj => {
+            const wantedData: any[] = [];
+            headerKeys.forEach(hKey => {
+                wantedData.push(obj[hKey]);
+            });
+            allObj.push(wantedData);
+        })
+
+        const strData = allObj.map(aObj => aObj.join(','));
+
+        return strData.join('\n');
     }
 }
 

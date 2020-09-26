@@ -17,6 +17,36 @@ class Drinks {
                 res.json(products);
             });
         });
+        this.router.get('/export', function (req, res, next) {
+            drink_1.Drink.find(function (err, products) {
+                if (err)
+                    return next(err);
+                res.writeHead(200, {
+                    'Content-Type': 'text/csv',
+                    'Content-Disposition': 'attachement; filename=drinks_export.csv'
+                });
+                res.end(this.dataToCSV(products, [{ key: 'name', label: 'name' }, { key: 'category', label: 'category' }, { key: 'price', label: 'price' }]));
+            }.bind(this));
+        }.bind(this));
+        this.router.get('/categories', function (req, res, next) {
+            drink_1.Drink.distinct('category', function (err, post) {
+                if (err)
+                    return next(err);
+                res.json(post);
+            });
+        });
+        this.router.get('/groupBy/:key', function (req, res, next) {
+            drink_1.Drink.aggregate()
+                .group({
+                _id: `$${req.params.key}`,
+                drinks: { $push: '$$ROOT' }
+            })
+                .exec(function (err, post) {
+                if (err)
+                    return next(err);
+                res.json(post);
+            });
+        });
         this.router.get('/:id', function (req, res, next) {
             drink_1.Drink.findById(req.params.id, function (err, post) {
                 if (err)
@@ -68,6 +98,21 @@ class Drinks {
                 });
             });
         });
+    }
+    dataToCSV(dataList, headers) {
+        const allObj = [];
+        const headerLabels = headers.map(header => header.label);
+        const headerKeys = headers.map(header => header.key);
+        allObj.push(headerLabels);
+        dataList.forEach(obj => {
+            const wantedData = [];
+            headerKeys.forEach(hKey => {
+                wantedData.push(obj[hKey]);
+            });
+            allObj.push(wantedData);
+        });
+        const strData = allObj.map(aObj => aObj.join(','));
+        return strData.join('\n');
     }
 }
 exports.default = new Drinks().router;
