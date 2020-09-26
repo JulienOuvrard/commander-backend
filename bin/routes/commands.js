@@ -68,7 +68,7 @@ class Commands {
                         "height": '200mm',
                         "header": {
                             "height": '20mm',
-                            "contents": '<div style="text-align: center;">Café de la Gare</div>'
+                            "contents": '<div style="text-align: center; font-size: 700">Café de la Gare</div>'
                         },
                     };
                     const filename = path.join(__dirname, '..', 'receipt', `${post.id}.pdf`);
