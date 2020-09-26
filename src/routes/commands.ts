@@ -1,6 +1,7 @@
 import * as express from 'express';
 import * as mongoose from 'mongoose';
-import * as pdf from 'html-pdf';
+// import * as pdf from 'html-pdf';
+const convertHTMLToPDF = require('pdf-puppeteer');
 import * as path from 'path';
 import * as fs from 'fs';
 import { Command } from '../models/command';
@@ -70,27 +71,30 @@ class Commands {
                 if (err) return next(err);
 
                 if (post) {
+                    const today = new Date().toLocaleDateString('fr-FR', {weekday: 'long', month: 'long', day: 'numeric', year:'numeric'});
+                    const contentDesc = this.commandDescHtml(req.body);
                     const html = fs.readFileSync(path.join(__dirname, '..', 'template/print.template.html'), 'utf8')
                                     .replace('{{title}}', 'Command')
-                                    .replace('{{content}}', this.commandDescHtml(req.body));
+                                    .replace('{{date}}', today)
+                                    .replace('{{content}}', contentDesc);
+                    const filename = path.join(__dirname, '..', 'receipt', `${post.id}.pdf`);
                     const options = {
+                        "path": filename,
                         "width": '80mm',
                         "height": '200mm',
-                        "header": {
-                            "height": '20mm',
-                            "contents": '<div style="text-align: center; font-size: 700">Café de la Gare</div>'
-                        },
+                        
                     }
-                    const filename = path.join(__dirname, '..', 'receipt', `${post.id}.pdf`);
-                    pdf
-                    .create(html, options)
-                    .toFile(filename, (err, file)=> {
-                        if (err) {
-                            return next(err.stack)
-                        }
-
-                        res.json(file);
-                    });
+                    convertHTMLToPDF(
+                        html,
+                        (pdf) => {
+                            //res.setHeader("Content-Type", "application/pdf");
+                            //res.send(pdf);
+                            res.json({filename})
+                        },
+                        options,
+                        null,
+                        false
+                    );
                 }
 
             }.bind(this))

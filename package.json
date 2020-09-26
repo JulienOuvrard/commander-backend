@@ -22,11 +22,11 @@
     "express-fileupload": "^0.4.0",
     "express-validator": "^5.3.1",
     "fast-csv": "^2.5.0",
-    "html-pdf": "^2.2.0",
     "json2csv": "^4.5.4",
     "mongoose": "^5.7.9",
     "morgan": "^1.9.1",
     "nodemon": "^1.19.4",
+    "pdf-puppeteer": "^1.1.10",
     "serve-favicon": "^2.5.0",
     "socket.io": "^2.3.0"
   },

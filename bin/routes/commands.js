@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const express = require("express");
-const pdf = require("html-pdf");
+const convertHTMLToPDF = require('pdf-puppeteer');
 const path = require("path");
 const fs = require("fs");
 const command_1 = require("../models/command");
@@ -60,26 +60,21 @@ class Commands {
                 if (err)
                     return next(err);
                 if (post) {
+                    const today = new Date().toLocaleDateString('fr-FR', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' });
+                    const contentDesc = this.commandDescHtml(req.body);
                     const html = fs.readFileSync(path.join(__dirname, '..', 'template/print.template.html'), 'utf8')
                         .replace('{{title}}', 'Command')
-                        .replace('{{content}}', this.commandDescHtml(req.body));
+                        .replace('{{date}}', today)
+                        .replace('{{content}}', contentDesc);
+                    const filename = path.join(__dirname, '..', 'receipt', `${post.id}.pdf`);
                     const options = {
+                        "path": filename,
                         "width": '80mm',
                         "height": '200mm',
-                        "header": {
-                            "height": '20mm',
-                            "contents": '<div style="text-align: center; font-size: 700">Café de la Gare</div>'
-                        },
                     };
-                    const filename = path.join(__dirname, '..', 'receipt', `${post.id}.pdf`);
-                    pdf
-                        .create(html, options)
-                        .toFile(filename, (err, file) => {
-                        if (err) {
-                            return next(err.stack);
-                        }
-                        res.json(file);
-                    });
+                    convertHTMLToPDF(html, (pdf) => {
+                        res.json({ filename });
+                    }, options, null, false);
                 }
             }.bind(this));
         }.bind(this));
