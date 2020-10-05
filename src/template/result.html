@@ -4,6 +4,10 @@
     <meta charset="utf8">
     <title>Command</title>
     <style>
+        html {
+            /*zoom: 55%*/
+        }
+
         html,
         body {
             margin: 0;
@@ -18,7 +22,7 @@
 
         .page {
             position: relative;
-            height: 200mm;
+            /*height: 200mm;*/
             width: 80mm;
             display: block;
             background: rgb(241, 241, 241);
@@ -73,27 +77,46 @@
 
         table {
             width: 100%;
+            border-collapse: collapse;
         }
 
         tr:last-child {
             border-top: 2px solid black;
+            margin-top: 6px;
+            padding: 8px;
         }
 
         td:last-child {
             text-align: right;
+            padding: 8px;
         }
     </style>
 </head>
 
 <body>
     <div class="page">
+        <h1 style="width: 100%; text-align: center; margin-top: 10mm; margin-bottom: 10mm;">Café de la Gare</h1>
+        <h2>Commande du lundi 5 octobre 2020</h2>
         <table><tr>
-            <td>(1) entrecôte [S], (1) frite </td>
+            <td>(1) pastis (1) ricard</td>
+            <td> 5.00€</td>
+            </tr><tr>
+            <td>(3) bière supérieure</td>
+            <td> 9.00€</td>
+            </tr><tr>
+            <td>(1) vin blanc (2) vin rouge</td>
+            <td> 4.30€</td>
+            </tr><tr>
+            <td>(1) steak haché (1) frite</td>
+            <td> 5.50€</td>
+            </tr><tr>
+            <td>(1) entrecôte (1) pâtes</td>
             <td>16.50€</td>
-            </tr>,<tr>
-            <td>(2) orangina</td>
-            <td> 4.60€</td>
-            </tr><tr><td>Total</td><td>21.10€</td></tr></table>
+            </tr><tr>
+            <td>(1) quiche</td>
+            <td> 4.50€</td>
+            </tr><tr><td>Total</td><td>44.80€</td></tr></table>
+        <h3 style="width: 100%; text-align: center; margin-top: 7mm; margin-bottom: 7mm;">Merci de votre visite !</h3>
     </div>
 </body>
 
