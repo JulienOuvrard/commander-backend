@@ -5,7 +5,7 @@
     <title>{{title}}</title>
     <style>
         html {
-            zoom: 55%
+            /*zoom: 55%*/
         }
 
         html,
@@ -22,12 +22,12 @@
 
         .page {
             position: relative;
-            height: 200mm;
+            /*height: 200mm;*/
             width: 80mm;
             display: block;
             background: rgb(241, 241, 241);
             page-break-after: auto;
-            margin: 50px;
+            margin: 0 50px;
             overflow: hidden;
         }
 
@@ -38,10 +38,11 @@
             }
 
             .page {
-                margin: 0;
+                margin: 0 5mm;
                 height: 100%;
-                width: 100%;
+                width: calc(100% - 10mm);
             }
+
         }
 
         .page.first {
@@ -80,6 +81,10 @@
             border-collapse: collapse;
         }
 
+        tr:first-child {
+            border-top: 2px solid black;
+        }
+
         tr:last-child {
             border-top: 2px solid black;
             margin-top: 6px;
@@ -98,6 +103,7 @@
         <h1 style="width: 100%; text-align: center; margin-top: 10mm; margin-bottom: 10mm;">Café de la Gare</h1>
         <h2>Commande du {{date}}</h2>
         {{content}}
+        <h3 style="width: 100%; text-align: center; margin-top: 7mm; margin-bottom: 7mm;">Merci de votre visite !</h3>
     </div>
 </body>
 

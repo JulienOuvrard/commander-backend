@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const express = require("express");
-const convertHTMLToPDF = require('pdf-puppeteer');
+const convertHTMLtoPDF_1 = require("../template/convertHTMLtoPDF");
 const path = require("path");
 const fs = require("fs");
 const command_1 = require("../models/command");
@@ -68,13 +68,19 @@ class Commands {
                         .replace('{{content}}', contentDesc);
                     const filename = path.join(__dirname, '..', 'receipt', `${post.id}.pdf`);
                     const options = {
-                        "path": filename,
-                        "width": '80mm',
-                        "height": '200mm',
+                        path: filename,
+                        printBackground: true,
+                        width: '80mm',
+                        scale: 1,
+                        preferCSSPageSize: false
                     };
-                    convertHTMLToPDF(html, (pdf) => {
+                    const puppeteerOptions = {
+                        headless: true,
+                        devtools: false,
+                    };
+                    convertHTMLtoPDF_1.convertHTMLToPDF(html, (pdf) => {
                         res.json({ filename });
-                    }, options, null, false);
+                    }, options, puppeteerOptions, false);
                 }
             }.bind(this));
         }.bind(this));
@@ -89,7 +95,7 @@ class Commands {
             <td>${price}€</td>
             </tr>`;
         }).join('');
-        const total = `<tr><td>Total</td><td>${this.formatPrice(totalPrice.toString())}€</td></tr>`;
+        const total = `<tr><td>Total</td><td>${this.formatPrice(totalPrice.toFixed(2))}€</td></tr>`;
         return `<table>${indentDesc}${total}</table>`;
     }
     formatPrice(price) {
