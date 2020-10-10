@@ -17,6 +17,36 @@ class Foods {
                 res.json(products);
             });
         });
+        this.router.get('/export', function (req, res, next) {
+            food_1.Food.find(function (err, products) {
+                if (err)
+                    return next(err);
+                res.writeHead(200, {
+                    'Content-Type': 'text/csv',
+                    'Content-Disposition': 'attachement; filename=foods_export.csv'
+                });
+                res.end(this.dataToCSV(products, [{ key: 'name', label: 'name' }, { key: 'category', label: 'category' }, { key: 'price', label: 'price' }]));
+            }.bind(this));
+        }.bind(this));
+        this.router.get('/categories', function (req, res, next) {
+            food_1.Food.distinct('category', function (err, post) {
+                if (err)
+                    return next(err);
+                res.json(post);
+            });
+        });
+        this.router.get('/groupBy/:key', function (req, res, next) {
+            food_1.Food.aggregate()
+                .group({
+                _id: `$${req.params.key}`,
+                foods: { $push: '$$ROOT' }
+            })
+                .exec(function (err, post) {
+                if (err)
+                    return next(err);
+                res.json(post);
+            });
+        });
         this.router.get('/:id', function (req, res, next) {
             food_1.Food.findById(req.params.id, function (err, post) {
                 if (err)
