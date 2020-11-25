@@ -74,11 +74,11 @@ class Commands {
                 if (post) {
                     const today = new Date().toLocaleDateString('fr-FR', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' });
                     const contentDesc = this.commandDescHtml(req.body);
-                    const html = fs.readFileSync(path.join(__dirname, '..', 'template/print.template.html'), 'utf8')
+                    const html = fs.readFileSync(path.join(__dirname, 'template/print.template.html'), 'utf8')
                         .replace('{{title}}', 'Command')
                         .replace('{{date}}', today)
                         .replace('{{content}}', contentDesc);
-                    const filename = path.join(__dirname, '..', 'receipt', `${post.id}.pdf`);
+                    const filename = path.join(__dirname, 'receipt', `${post.id}.pdf`);
                     const options = {
                         path: filename,
                         printBackground: true,
