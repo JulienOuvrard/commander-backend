@@ -4,12 +4,11 @@
   "description": "Backend services for commander application",
   "main": "app.js",
   "scripts": {
-    "prestart": "npm run build",
-    "start": "node bin/index.js",
-    "build": "npm run deletedir && tsc && npm run move && npm run createdir",
-    "move": "cp src/template/print.template.html bin/template",
-    "createdir": "mkdir bin/receipt && cd bin/receipt && touch .gitkeep",
-    "deletedir": "rm -fr bin/*",
+    "start": "node dist/index.js",
+    "build": "npm run deletedir && webpack && npm run move && npm run createdir",
+    "move": "mkdir dist/template && cp src/template/print.template.html dist/template",
+    "createdir": "mkdir dist/receipt && cd dist/receipt && touch .gitkeep",
+    "deletedir": "rm -fr dist",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Julien Ouvrard",
@@ -43,12 +42,16 @@
     "@types/mongodb": "^3.3.10",
     "@types/mongoose": "^5.5.30",
     "@types/morgan": "^1.7.37",
-    "@types/node": "^10.17.5",
+    "@types/node": "^10.17.47",
     "@types/socket.io": "^2.1.4",
     "codelyzer": "^4.5.0",
     "eslint": "^4.19.1",
+    "ts-loader": "^8.0.11",
     "ts-node": "^6.2.0",
     "tslint": "^5.20.1",
-    "typescript": "^3.6.4"
+    "typescript": "^3.6.4",
+    "webpack": "^5.6.0",
+    "webpack-cli": "^4.2.0",
+    "webpack-node-externals": "^2.5.2"
   }
 }
