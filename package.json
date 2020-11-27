@@ -4,10 +4,10 @@
   "description": "Backend services for commander application",
   "main": "app.js",
   "scripts": {
-    "start": "node dist/index.js",
+    "start": "node dist/commander-backend/index.js",
     "build": "npm run deletedir && webpack && npm run move && npm run createdir",
-    "move": "mkdir dist/template && cp src/template/print.template.html dist/template",
-    "createdir": "mkdir dist/receipt && cd dist/receipt && touch .gitkeep",
+    "move": "mkdir dist/commander-backend/template && cp src/template/print.template.html dist/commander-backend/template",
+    "createdir": "mkdir dist/commander-backend/receipt && cd dist/commander-backend/receipt && touch .gitkeep",
     "deletedir": "rm -fr dist",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
